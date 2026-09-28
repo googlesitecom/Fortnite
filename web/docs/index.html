@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Battle Island — Battle Royale 3D (WebGL)</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- ===================== MENÚ PRINCIPAL / LOBBY ===================== -->
+<div id="mainMenu" class="screen">
+  <canvas id="lobbyCanvas"></canvas>
+  <div class="menu-overlay">
+    <div class="logo">BATTLE&nbsp;ISLAND</div>
+    <div class="menu-buttons">
+      <button id="btnPlay" class="mbtn primary">▶ JUGAR (SOLO)</button>
+      <button id="btnDuos" class="mbtn">JUGAR (DÚOS vs BOTS)</button>
+      <button id="btnWardrobe" class="mbtn">👕 VESTUARIO</button>
+      <button id="btnShop" class="mbtn">🛒 TIENDA</button>
+      <button id="btnPass" class="mbtn">🎫 PASE DE BATALLA</button>
+      <button id="btnStats" class="mbtn">📊 ESTADÍSTICAS</button>
+      <button id="btnSettings" class="mbtn">⚙ AJUSTES</button>
+    </div>
+    <div class="player-card">
+      <div id="playerNameLbl">Comandante</div>
+      <div class="xpbar"><div id="xpFill" class="xpfill"></div><span id="xpLbl">Nv 1 · 0/250 XP</span></div>
+      <div id="skinLbl">Skin: Azul Onda</div>
+    </div>
+    <div class="footnote">Motor WebGL propio · Inspirado en BR clásicos · Arte y marca originales</div>
+  </div>
+</div>
+
+<!-- ===================== VESTUARIO ===================== -->
+<div id="wardrobeScreen" class="screen hidden">
+  <h2>Vestuario</h2>
+  <div class="panel-grid" id="skinGrid"></div>
+  <div class="panel-sub">Pico recolector</div>
+  <div class="panel-grid" id="pickGrid"></div>
+  <button class="mbtn backBtn" data-back="mainMenu">← VOLVER</button>
+</div>
+
+<!-- ===================== TIENDA ===================== -->
+<div id="shopScreen" class="screen hidden">
+  <h2>Tienda diaria <small id="shopTimer"></small></h2>
+  <div class="panel-grid" id="shopGrid"></div>
+  <div class="currency">💎 Monedas Vortéx: <b id="vbBalance">800</b></div>
+  <button class="mbtn backBtn" data-back="mainMenu">← VOLVER</button>
+</div>
+
+<!-- ===================== PASE DE BATALLA ===================== -->
+<div id="passScreen" class="screen hidden">
+  <h2>Pase de Batalla — Temporada 1</h2>
+  <div id="passTrack" class="pass-track"></div>
+  <button class="mbtn backBtn" data-back="mainMenu">← VOLVER</button>
+</div>
+
+<!-- ===================== ESTADÍSTICAS ===================== -->
+<div id="statsScreen" class="screen hidden">
+  <h2>Estadísticas del jugador</h2>
+  <div id="statsBody" class="stats-box"></div>
+  <button class="mbtn backBtn" data-back="mainMenu">← VOLVER</button>
+</div>
+
+<!-- ===================== AJUSTES ===================== -->
+<div id="settingsScreen" class="screen hidden">
+  <h2>Ajustes</h2>
+  <div class="settings-box">
+    <label>Calidad gráfica
+      <select id="optQuality">
+        <option value="low">Bajo</option>
+        <option value="medium">Medio</option>
+        <option value="high" selected>Alto</option>
+        <option value="epic">Épico</option>
+        <option value="ludicrous">Ludicrous</option>
+      </select>
+    </label>
+    <label>Resolución de render <input type="range" id="optRes" min="50" max="150" value="100"><span id="optResV">100%</span></label>
+    <label>Sombras (CSM) <input type="checkbox" id="optShadows" checked></label>
+    <label>Oclusión ambiental (SSAO) <input type="checkbox" id="optSSAO" checked></label>
+    <label>Florecido (Bloom) <input type="checkbox" id="optBloom" checked></label>
+    <label>Niebla atmosférica <input type="checkbox" id="optFog" checked></label>
+    <label>Movimiento de cámara suave <input type="checkbox" id="optSmooth" checked></label>
+    <label>Volumen general <input type="range" id="optVol" min="0" max="100" value="70"><span id="optVolV">70%</span></label>
+    <label>Música <input type="range" id="optMus" min="0" max="100" value="60"><span id="optMusV">60%</span></label>
+    <label>Sensibilidad ratón <input type="range" id="optSens" min="10" max="200" value="80"><span id="optSensV">0.80</span></label>
+    <label>Cámara <select id="optCam"><option value="tps">Tercera persona</option><option value="fps">Primera persona</option></select></label>
+  </div>
+  <button class="mbtn backBtn" data-back="mainMenu">← GUARDAR Y VOLVER</button>
+</div>
+
+<!-- ===================== COLA DE PARTIDA ===================== -->
+<div id="queueScreen" class="screen hidden">
+  <div class="queue-box">
+    <div class="radar"></div>
+    <h2 id="queueTitle">Buscando partida…</h2>
+    <div id="queueCount">Jugadores listos: 0/100</div>
+    <button id="btnCancelQueue" class="mbtn">Cancelar</button>
+  </div>
+</div>
+
+<!-- ===================== HUD EN PARTIDA ===================== -->
+<div id="hud" class="hidden">
+  <canvas id="gameCanvas"></canvas>
+  <!-- vida/escudo -->
+  <div class="bars">
+    <div class="shieldbar"><div id="shieldFill"></div><span id="shieldTxt">0</span></div>
+    <div class="hpbar"><div id="hpFill"></div><span id="hpTxt">100</span></div>
+  </div>
+  <!-- inventario -->
+  <div class="inv" id="invBar"></div>
+  <!-- materiales + modo construcción -->
+  <div class="mats" id="matBar">
+    <div class="mat wood"><span id="matWood">0</span><i>🪵</i><b>[1]</b></div>
+    <div class="mat stone"><span id="matStone">0</span><i>🪨</i><b>[2]</b></div>
+    <div class="mat metal"><span id="matMetal">0</span><i>⚙️</i><b>[3]</b></div>
+  </div>
+  <div class="buildhint hidden" id="buildHint">[Z] Pared · [X] Rampas · [C] Piso · [V] Techo · [E] Editar · [R] Reparar · [G] Turbo</div>
+  <!-- minimapa -->
+  <div class="minimap-wrap">
+    <canvas id="minimap" width="190" height="190"></canvas>
+    <div class="compass" id="compass"></div>
+  </div>
+  <!-- vivos / kills -->
+  <div class="topright">
+    <div class="alive">👤 <span id="aliveCount">100</span> VIVOS</div>
+    <div class="kills">☠ <span id="killCount">0</span> ELIMINACIONES</div>
+    <div class="stormtimer" id="stormTimer"></div>
+  </div>
+  <!-- feed -->
+  <div class="killfeed" id="killFeed"></div>
+  <!-- crosshair -->
+  <div id="crosshair"><span></span><span></span><span></span><span></span><i id="hitmark"></i></div>
+  <!-- anuncios -->
+  <div id="announce"></div>
+  <div id="interactHint" class="hidden">[F] Interactuar</div>
+  <!-- pausa -->
+  <div id="pauseMenu" class="hidden">
+    <h2>PAUSA</h2>
+    <button id="btnResume" class="mbtn primary">Continuar</button>
+    <button id="btnQuit" class="mbtn">Abandonar partida</button>
+    <div class="pause-stats" id="pauseStats"></div>
+  </div>
+</div>
+
+<!-- ===================== PANTALLAS FINALES ===================== -->
+<div id="deathScreen" class="screen hidden">
+  <h1 class="dethTitle">ELIMINADO</h1>
+  <div id="deathStats" class="endstats"></div>
+  <button id="btnSpectate" class="mbtn">👁 Espectar</button>
+  <button id="btnDeathResults" class="mbtn primary">Ver resultados</button>
+</div>
+
+<div id="victoryScreen" class="screen hidden">
+  <canvas id="confettiCanvas"></canvas>
+  <h1 class="vicTitle">¡VICTORIA MAGNA!</h1>
+  <div class="vicSub">#1 — Último islandés en pie</div>
+  <button id="btnVicResults" class="mbtn primary">Ver resultados</button>
+</div>
+
+<div id="resultsScreen" class="screen hidden">
+  <h2>Resumen de partida</h2>
+  <div id="resultsBody" class="endstats"></div>
+  <div id="resultsXP" class="xp-gain"></div>
+  <button id="btnBackMenu" class="mbtn primary">VOLVER AL LOBBY</button>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+/* ===== Battle Island — UI estilo BR, arte original ===== */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+html,body{width:100%;height:100%;overflow:hidden;background:#0a0e1a;color:#e8ecf5}
+.hidden{display:none!important}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:40}
+
+/* ---------- MENÚ PRINCIPAL ---------- */
+#mainMenu{background:radial-gradient(ellipse at 30% 20%,#1b2a4d 0%,#0a0e1a 70%)}
+#lobbyCanvas{position:absolute;inset:0;width:100%;height:100%}
+.menu-overlay{position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.logo{font-size:64px;font-weight:900;letter-spacing:6px;color:#fff;text-shadow:0 0 30px #4fc3ff,0 4px 0 #1a3c66;margin-bottom:8px;font-style:italic;transform:skewX(-8deg)}
+.menu-buttons{display:flex;flex-direction:column;gap:10px;pointer-events:auto;min-width:340px}
+.mbtn{background:linear-gradient(#2a3f6e,#1a2a4d);border:1px solid #4a6fa8;color:#dfe9ff;padding:13px 26px;font-size:17px;font-weight:700;border-radius:8px;cursor:pointer;transition:.15s;text-align:left}
+.mbtn:hover{background:linear-gradient(#3a558e,#24396a);transform:translateX(4px);box-shadow:0 0 14px rgba(79,195,255,.4)}
+.mbtn.primary{background:linear-gradient(#ffb347,#e08a1e);color:#241a05;border-color:#ffd27a}
+.mbtn.primary:hover{box-shadow:0 0 18px rgba(255,180,70,.6)}
+.player-card{position:absolute;left:24px;bottom:24px;background:rgba(10,16,32,.8);border:1px solid #33507f;border-radius:10px;padding:14px 20px;pointer-events:auto;min-width:280px}
+.player-card div:first-child{font-weight:800;font-size:18px;color:#ffd27a}
+.xpbar{position:relative;height:16px;background:#111a30;border-radius:8px;margin:8px 0;overflow:hidden;border:1px solid #33507f}
+.xpfill{height:100%;width:0%;background:linear-gradient(90deg,#37d67a,#7ef29e);transition:width .5s}
+.xpbar span{position:absolute;inset:0;font-size:11px;display:flex;align-items:center;justify-content:center;color:#fff;text-shadow:0 1px 2px #000}
+.footnote{position:absolute;bottom:10px;font-size:11px;color:#6f84ad}
+
+/* ---------- PANELES ---------- */
+h2{font-size:34px;margin-bottom:20px;color:#ffd27a;text-shadow:0 0 12px rgba(255,180,70,.4)}
+#wardrobeScreen,#shopScreen,#passScreen,#statsScreen,#settingsScreen{background:rgba(8,12,24,.96)}
+.panel-grid{display:flex;gap:14px;flex-wrap:wrap;max-width:900px;justify-content:center;margin-bottom:18px}
+.panel-sub{color:#8fb4e8;font-weight:700;margin-bottom:10px}
+.item-card{width:150px;background:#141e38;border:2px solid #2c4470;border-radius:10px;padding:12px;text-align:center;cursor:pointer;transition:.15s}
+.item-card:hover{transform:translateY(-4px);box-shadow:0 6px 18px rgba(0,0,0,.6)}
+.item-card.owned{border-color:#37d67a}.item-card.equipped{border-color:#ffd27a;box-shadow:0 0 12px rgba(255,210,122,.5)}
+.item-card .swatch{height:70px;border-radius:8px;margin-bottom:8px}
+.item-card .nm{font-weight:700;font-size:13px}
+.item-card .pr{color:#7ecbff;font-size:12px;margin-top:4px}
+.r-common{border-color:#9aa4b5}.r-uncommon{border-color:#4caf50}.r-rare{border-color:#3f8cff}.r-epic{border-color:#a13cff}.r-legendary{border-color:#ffb30a}
+.currency{margin:8px 0 16px;font-size:16px;color:#7ecbff}
+.backBtn{position:fixed;top:20px;left:20px}
+.pass-track{display:flex;gap:8px;overflow-x:auto;max-width:92vw;padding:16px;background:#0e1526;border-radius:12px}
+.pass-tier{min-width:96px;background:#182646;border:1px solid #33507f;border-radius:8px;padding:10px;text-align:center;font-size:12px}
+.pass-tier.done{border-color:#37d67a;background:#143324}
+.pass-tier .lv{font-size:18px;font-weight:900;color:#ffd27a}
+.stats-box,.endstats{background:#101a30;border:1px solid #33507f;border-radius:12px;padding:22px 34px;font-size:17px;line-height:2;min-width:380px}
+.endstats b{color:#7ecbff;float:right;margin-left:40px}
+.settings-box{display:flex;flex-direction:column;gap:12px;background:#101a30;padding:24px;border-radius:12px;min-width:440px;border:1px solid #33507f}
+.settings-box label{display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:15px}
+.settings-box select,.settings-box input[type=range]{width:180px}
+
+/* ---------- COLA ---------- */
+#queueScreen{background:rgba(6,9,18,.97)}
+.queue-box{text-align:center}
+.radar{width:110px;height:110px;border-radius:50%;border:4px solid #22406e;border-top-color:#4fc3ff;margin:0 auto 24px;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- HUD ---------- */
+#hud{position:fixed;inset:0;z-index:20;pointer-events:none}
+#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.bars{position:absolute;left:22px;bottom:24px;width:320px}
+.shieldbar,.hpbar{position:relative;height:22px;background:rgba(5,10,22,.75);border-radius:5px;margin-bottom:6px;border:1px solid rgba(255,255,255,.25);overflow:hidden}
+#shieldFill{height:100%;width:0%;background:linear-gradient(90deg,#2f9dff,#7ecbff)}
+#hpFill{height:100%;width:100%;background:linear-gradient(90deg,#2ecc71,#7ef29e)}
+.shieldbar span,.hpbar span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;text-shadow:0 1px 2px #000}
+.inv{position:absolute;right:22px;bottom:24px;display:flex;gap:8px}
+.slot{width:86px;height:86px;background:rgba(8,14,28,.8);border:2px solid #3a4f78;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;position:relative}
+.slot.sel{border-color:#ffd27a;box-shadow:0 0 12px rgba(255,210,122,.55);transform:translateY(-6px)}
+.slot .ic{font-size:26px}.slot .am{position:absolute;bottom:3px;right:6px;font-weight:800;font-size:12px}
+.slot .rn{position:absolute;top:2px;left:6px;font-size:10px;color:#9db4d8}
+.slot.r1{border-color:#9aa4b5}.slot.r2{border-color:#4caf50}.slot.r3{border-color:#3f8cff}.slot.r4{border-color:#a13cff}.slot.r5{border-color:#ffb30a}
+.mats{position:absolute;left:22px;bottom:110px;display:flex;gap:10px}
+.mat{background:rgba(8,14,28,.8);border:2px solid #3a4f78;border-radius:8px;padding:6px 12px;display:flex;align-items:center;gap:6px;font-weight:800}
+.mat.sel{border-color:#ffd27a}
+.minimap-wrap{position:absolute;right:22px;top:60px}
+#minimap{border:2px solid #33507f;border-radius:8px;background:#0a1222}
+.compass{margin-top:4px;background:rgba(8,14,28,.8);border-radius:6px;text-align:center;font-weight:800;padding:3px;font-size:13px;color:#cfe3ff}
+.topright{position:absolute;right:22px;top:12px;text-align:right;font-weight:800;font-size:15px;text-shadow:0 1px 3px #000}
+.alive{color:#7ef29e}.kills{color:#ffd27a}
+.stormtimer{margin-top:4px;color:#c77dff;font-size:13px}
+.killfeed{position:absolute;left:22px;top:12px;font-size:13px;display:flex;flex-direction:column;gap:4px}
+.kf-item{background:rgba(8,14,28,.75);padding:4px 10px;border-radius:5px;border-left:3px solid #ff5b5b;animation:kfin .3s}
+.kf-item.me{border-left-color:#ffd27a}
+@keyframes kfin{from{opacity:0;transform:translateX(-14px)}}
+#crosshair{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:26px;height:26px}
+#crosshair span{position:absolute;background:#eaffff;box-shadow:0 0 3px #000;opacity:.9}
+#crosshair span:nth-child(1){left:12px;top:0;width:2px;height:8px}
+#crosshair span:nth-child(2){left:12px;bottom:0;width:2px;height:8px}
+#crosshair span:nth-child(3){top:12px;left:0;height:2px;width:8px}
+#crosshair span:nth-child(4){top:12px;right:0;height:2px;width:8px}
+#hitmark{position:absolute;inset:-8px;opacity:0;background:conic-gradient(from 45deg,transparent 0 24%,#fff 25% 26%,transparent 27% 49%,#fff 50% 51%,transparent 52% 74%,#fff 75% 76%,transparent 77% 99%,#fff 100%)}
+#announce{position:absolute;top:16%;width:100%;text-align:center;font-size:30px;font-weight:900;color:#c77dff;text-shadow:0 0 18px #7a2fd8,0 2px 4px #000;opacity:0;transition:opacity .4s}
+#interactHint{position:absolute;top:56%;width:100%;text-align:center;font-size:15px;color:#fff;text-shadow:0 1px 4px #000}
+.buildhint{position:absolute;bottom:120px;width:100%;text-align:center;font-size:12px;color:#ffe9b0;text-shadow:0 1px 3px #000}
+#pauseMenu{position:absolute;inset:0;background:rgba(5,8,18,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;pointer-events:auto;z-index:30}
+.pause-stats{font-size:14px;color:#9db4d8;margin-top:10px}
+
+/* ---------- FINALES ---------- */
+#deathScreen{background:rgba(20,5,8,.92)}
+.dethTitle{font-size:60px;color:#ff5b5b;text-shadow:0 0 24px #a00;letter-spacing:4px;margin-bottom:20px}
+#victoryScreen{background:radial-gradient(ellipse at center,#3d2c05 0%,#0a0805 75%)}
+.vicTitle{font-size:74px;color:#ffd27a;text-shadow:0 0 40px #ffab00,0 4px 0 #7a5200;letter-spacing:3px;animation:vcpulse 1.2s ease-in-out infinite alternate;transform:skewX(-6deg)}
+.vicSub{font-size:22px;color:#ffe9b0;margin:12px 0 30px}
+@keyframes vcpulse{from{transform:scale(1) skewX(-6deg)}to{transform:scale(1.05) skewX(-6deg)}}
+#confettiCanvas{position:absolute;inset:0;pointer-events:none}
+#resultsScreen{background:rgba(8,12,24,.97)}
+.xp-gain{margin:16px 0;font-size:20px;color:#7ef29e;font-weight:800}
+.dmg-num{position:fixed;font-weight:900;color:#fff;text-shadow:0 0 4px #000,0 2px 2px #000;pointer-events:none;z-index:35;animation:dmgfly .9s forwards;font-size:18px}
+.dmg-num.crit{color:#ffb30a;font-size:24px}
+@keyframes dmgfly{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-52px)}}
