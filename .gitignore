@@ -1,1 +1,10 @@
-(empty)
+build/
+bin/
+__pycache__/
+*.pyc
+*.o
+*.so
+*.exe
+ saves/*.json
+.DS_Store
+
